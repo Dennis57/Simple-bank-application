@@ -1,0 +1,160 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
+public class UserQuery {
+	private Connector con;
+	private ResultSet rs;
+	private ArrayList <User> userList = new ArrayList<User>();
+	
+	public void createData1(String name, String pass, int balance, int history) 
+	{
+		con = new Connector();
+		con.updateQ("INSERT INTO `account`(`Name`, `Pass`, `Balance`, `History`) VALUES (\""+name+"\" , \""+pass+"\", "+balance+","+history+")");
+		con.close();
+	}
+	
+	public ArrayList <User> getAllData()
+	{
+		con = new Connector();
+		String name, pass;
+		int balance, history;
+		rs = con.execute("select * from `account`");
+		
+		try
+		{
+			while(rs.next())
+			{
+				name = rs.getString("Name");
+				pass = rs.getString("Pass");
+				balance = rs.getInt("Balance");
+				history = rs.getInt("History");
+				User user = new User(name, pass, balance, history);
+				userList.add(user);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		con.close();
+		return userList;
+	}
+	
+	public boolean verify(String wantedName, String wantedPass)
+	{
+		con = new Connector();
+		rs = con.execute("select * from `account` where Name = \"" +wantedName+"\" and Pass = \"" +wantedPass+ "\"");
+		String name = "", pass = "";
+		
+		try
+		{
+			while(rs.next())
+			{
+				name = rs.getString("Name");
+				pass = rs.getString("Pass");
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		if(name.equals(wantedName) && pass.equals(wantedPass))
+		{
+			con.close();
+			return true;
+		}
+
+		con.close();
+		return false;
+	}
+	
+	public void topUp(String wantedName, int wantedBalance)
+	{
+		con = new Connector();
+		rs = con.execute("select * from `account` WHERE Name =\"" +wantedName+ "\"");
+		int balance = 0, history;
+		
+		try
+		{
+			while(rs.next())
+			{
+				balance = rs.getInt("Balance");
+				history = rs.getInt("History");
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		balance = balance + wantedBalance;
+		history = wantedBalance;
+		
+		con.updateQ("UPDATE `account` SET `Balance`=" +balance+ ",`History`=" +history+" WHERE `Name` =\"" +wantedName+"\"");
+		JOptionPane.showMessageDialog(null, "Successfully top up!");
+		con.close();
+	}
+	
+	public void pay(String wantedName, int wantedBalance)
+	{
+		con = new Connector();
+		rs = con.execute("select * from `account` WHERE Name =\"" +wantedName+ "\"");
+		int balance = 0, history = 0;
+		
+		try
+		{
+			while(rs.next())
+			{
+				balance = rs.getInt("Balance");
+				history = rs.getInt("History");
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		if(wantedBalance > balance)
+		{
+			JOptionPane.showMessageDialog(null, "You need to top up");
+		}
+		else
+		{
+			balance = balance - wantedBalance;
+			history = wantedBalance;
+			con.updateQ("UPDATE `account` SET `Balance`=" +balance+ ",`History`=" +history+" WHERE `Name` =\"" +wantedName+"\"");
+			JOptionPane.showMessageDialog(null, "Successfully paid");
+			con.close();
+		}
+		
+	}
+	
+	public void seeHistory(String wantedName)
+	{
+		con = new Connector();
+		
+		rs = con.execute("select * from `account` where Name =\"" +wantedName+ "\"");
+		
+		int history = 0;
+		try
+		{
+			while(rs.next())
+			{
+				history = rs.getInt("History");
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		JOptionPane.showMessageDialog(null, "Last history money top up / spent: " + history);
+		con.close();
+		
+	}
+}
