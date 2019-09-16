@@ -1,0 +1,98 @@
+
+public class User {
+	
+	private String name;
+	private String pass;
+	private int balance;
+	private int history;
+	
+	public User()
+	{
+		
+	}
+
+	public User(String name, String pass, int balance, int history) {
+		super();
+		this.name = name;
+		this.pass = pass;
+		this.balance = balance;
+		this.history = history;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPass() {
+		return pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+
+	public int getBalance() {
+		return balance;
+	}
+
+	public void setBalance(int balance) {
+		this.balance = balance;
+	}
+
+	public int getHistory() {
+		return history;
+	}
+
+	public void setHistory(int history) {
+		this.history = history;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + balance;
+		result = prime * result + history;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((pass == null) ? 0 : pass.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (balance != other.balance)
+			return false;
+		if (history != other.history)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (pass == null) {
+			if (other.pass != null)
+				return false;
+		} else if (!pass.equals(other.pass))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", pass=" + pass + ", balance=" + balance + ", history=" + history + "]";
+	}
+	
+	
+	
+}
