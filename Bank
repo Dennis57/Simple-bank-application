@@ -1,0 +1,104 @@
+import java.awt.FlowLayout;
+import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+public class Bank extends JFrame implements ActionListener{
+
+	private UserQuery uq = new UserQuery();
+	
+	private String name;
+	
+	int money;
+	
+	private JLabel amount;
+	private JTextField f1;
+	private JButton logout, topUp, pay, history;
+	
+	public void setFrame()
+	{
+		setLayout(new FlowLayout());
+		setVisible(true);
+		setSize(400,400);
+		setTitle("Welcome, " + name);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public void makeObject()
+	{
+		amount = new JLabel("Input amount:");
+		f1 = new JTextField(20);
+		logout = new JButton("Log Out");
+		topUp = new JButton("Top Up");
+		pay = new JButton("Pay");
+		history = new JButton("See History");
+		
+		logout.addActionListener(this);
+		topUp.addActionListener(this);
+		pay.addActionListener(this);
+		history.addActionListener(this);
+		
+		add(amount);
+		add(f1);
+		add(logout);
+		add(topUp);
+		add(pay);
+		add(history);
+	}
+	
+	public Bank(String name) {
+		this.name = name;
+		
+		makeObject();
+		setFrame();
+		
+	}
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String temp = f1.getText();
+		/*if(temp.isEmpty())
+		{
+			JOptionPane.showMessageDialog(null, "Form should not be empty!");
+		}*/
+		if(e.getSource() == logout)
+		{
+			this.dispose();
+			new Menu();
+		}
+		
+		if(e.getSource() == history)
+		{
+			uq.seeHistory(name);
+		}
+		
+		else
+		{
+			if(temp.isEmpty())
+			{
+				JOptionPane.showMessageDialog(null, "Form should not be empty!");
+			}
+			else
+			{
+				money = Integer.parseInt(temp);
+				
+				if(e.getSource() == topUp)
+				{
+					uq.topUp(name, money);
+				}
+				else if(e.getSource() == pay)
+				{
+					uq.pay(name, money);
+				}
+			}
+		}
+	}
+	
+}
