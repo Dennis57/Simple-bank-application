@@ -1,0 +1,88 @@
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+public class Login extends JFrame implements ActionListener{
+
+	private UserQuery uq = new UserQuery();
+	
+	boolean flag;
+	String nameTemp, passTemp;
+	
+	private JLabel name, pass;
+	private JTextField f1, f2;
+	private JButton back, login;
+	
+	public void setFrame()
+	{
+		setLayout(new FlowLayout());
+		setVisible(true);
+		setSize(300,150);
+		setTitle("Login");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public void makeObject()
+	{
+		name = new JLabel("Input name:");
+		pass = new JLabel("Input pass:");
+		f1 = new JTextField(20);
+		f2 = new JTextField(20);
+		back = new JButton("Back");
+		login = new JButton("Login");
+		
+		back.addActionListener(this);
+		login.addActionListener(this);
+		
+		add(name);
+		add(f1);
+		add(pass);
+		add(f2);
+		add(back);
+		add(login);
+	}
+	
+	public Login()
+	{
+		makeObject();
+		
+		setFrame();
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		nameTemp = f1.getText();
+		passTemp = f2.getText();
+		if(e.getSource() == back)
+		{
+			this.dispose();
+			new Menu();
+		}
+		else if(e.getSource() == login)
+		{
+			flag = false;
+			if(uq.verify(nameTemp, passTemp) == true)
+			{
+				flag = true;
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Username / password isn't registered.");
+			}
+		}
+		
+		if(flag == true)
+		{
+			this.dispose();
+			new Bank(nameTemp);
+		}
+		
+	}
+
+}
