@@ -1,0 +1,60 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class Connector {
+
+	private Connection con;
+	private ResultSet rs;
+	private Statement st;
+	
+	public Connector()
+	{
+		try {
+			con = DriverManager.getConnection("jdbc:mysql://localhost/databank?useTimezone=true&serverTimezone=UTC", "root", "");
+			st = con.createStatement(1004, 1008);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public ResultSet execute(String query) //untuk mengambil data dari database aja
+	{
+		try {
+			rs = st.executeQuery(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return rs;
+	}
+	
+	public void updateQ(String query) //untuk input, update, dan delete
+	{
+		try
+		{
+			st.executeUpdate(query);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public Connection getConnection()
+	{
+		return con;
+	}
+	
+	public void close()
+	{
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+}
