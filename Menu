@@ -1,0 +1,73 @@
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class Menu extends JFrame implements ActionListener{
+
+	private JPanel main, center, bottom;
+	private JLabel icon;
+	private JButton login, register;
+	
+	public void setFrame()
+	{
+		setVisible(true);
+		setSize(400,300);
+		setTitle("Login");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public void makeObject()
+	{
+		main = new JPanel(new BorderLayout());
+		
+		center = new JPanel(new FlowLayout());
+		bottom = new JPanel(new FlowLayout());
+		
+		icon = new JLabel(new ImageIcon("Bank.png"));
+		
+		login = new JButton("Login");
+		register = new JButton("Register");
+		
+		login.addActionListener(this);
+		register.addActionListener(this);
+		
+		center.add(icon);
+		
+		bottom.add(login);
+		bottom.add(register);
+		
+		main.add(center, BorderLayout.CENTER);
+		main.add(bottom, BorderLayout.SOUTH);
+		
+		add(main);
+	}
+	
+	public Menu()
+	{
+		makeObject();
+		
+		setFrame();
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == login)
+		{
+			this.dispose();
+			new Login();
+		}
+		else if(e.getSource() == register)
+		{
+			this.dispose();
+			new Register();
+		}
+	}
+
+}
